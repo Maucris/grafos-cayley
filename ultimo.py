@@ -64,9 +64,8 @@ def aristas_trasposition(n):
     
     return aristas
 
-def construir_mejorada_cayley(n, regla_adyacencia):
+def construir_mejorada_cayley(aristas):
     G = nx.Graph()# creamos el grafo vacio 
-    aristas = regla_adyacencia(n) #invocamos la funcion aristas  para obtener las aristas posibles 
     grado = len(aristas)
     
     letras = string.ascii_lowercase # genera una lista de letras minusculas
@@ -93,7 +92,6 @@ def construir_mejorada_cayley(n, regla_adyacencia):
                 nodos.append(nuevo_nodo) # agregamos el nodo a la lista de nodos 
 
             G.add_edge(nodo_actual, nuevo_nodo) # creamos las aristas
-            #G.add_edge(nodo_actual, nuevo_nodo, label=str(arista)) # agregamos la etiqueta a la arista
             G.add_edge(nodo_actual, nuevo_nodo, label=letras_generadores[arista]) # agregamos la etiqueta a la arista
 
     return G
@@ -194,14 +192,12 @@ def dibujar_grafo_bfs(G):
     plt.show()
 
 
-
-
-
-G = construir_mejorada_cayley(4, aristas_bubble) # CREAMOS EL GRAFO DESEADO
+n=4 # numero de elementos en la permutacion
+aristas = aristas_bubble(n) #invocamos la funcion aristas  para obtener las aristas posibles 
+G = construir_mejorada_cayley(aristas) # CREAMOS EL GRAFO DESEADO
 dibujar_grafo(G) # DIBUJAMOS EL GRAFO 
 
-
-nodo_inicio = (1, 2,3,4)    # nodo de inicio para el BFS
+nodo_inicio = (1,2,3,4)    # nodo de inicio para el BFS
 
 G = bfs_etiquetado(G, nodo_inicio) # REALIZAMOS EL BFS ETIQUETANDO LOS NODOS
 
