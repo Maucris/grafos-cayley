@@ -39,7 +39,7 @@ def exportar_grafo_etiquetado(n, tipo, prioridad=None, outdir="gexf"):
 
 if __name__ == "__main__":
     exportar_grafo_etiquetado(
-        n=4,
+        n=8,
         tipo="transposition",
         prioridad={'b': 0, 'c': 1}  
     )

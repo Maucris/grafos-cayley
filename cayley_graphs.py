@@ -195,15 +195,15 @@ def dibujar_grafo_bfs(G):
     plt.show()
 
 
-n=4 # numero de elementos en la permutacion
-generadores = generadores_transposition(n) #invocamos la funcion generadores  para obtener las aristas posibles
-G = construir_grafo_cayley(generadores) # CREAMOS EL GRAFO DESEADO
-dibujar_grafo(G) # DIBUJAMOS EL GRAFO
+#n=4 # numero de elementos en la permutacion
+#generadores = generadores_transposition(n) #invocamos la funcion generadores  para obtener las aristas posibles
+#G = construir_grafo_cayley(generadores) # CREAMOS EL GRAFO DESEADO
+#dibujar_grafo(G) # DIBUJAMOS EL GRAFO
 
-nodo_inicio = (1,2,3,4)    # nodo de inicio para el BFS
+#nodo_inicio = (1,2,3,4)    # nodo de inicio para el BFS
 
-prioridad ={'b': 0, 'c':1}
+#prioridad ={'b': 0, 'c':1}
 
-G = bfs_etiquetado(G, nodo_inicio, prioridad=prioridad) # REALIZAMOS EL BFS ETIQUETANDO LOS NODOS
+#G = bfs_etiquetado(G, nodo_inicio, prioridad=prioridad) # REALIZAMOS EL BFS ETIQUETANDO LOS NODOS
 
-dibujar_grafo_bfs(G) # DIBUJAMOS EL GRAFO ETIQUETADO
+#dibujar_grafo_bfs(G) # DIBUJAMOS EL GRAFO ETIQUETADO
