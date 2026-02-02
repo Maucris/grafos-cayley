@@ -5,7 +5,7 @@ import string
 from collections import deque
 
 # FUNCIONES PARA OBTENER LOS GENERADORES DE ARISTAS
-def aristas_pancake(n):
+def generadores_pancake(n):
     
     p1=tuple(range(1,n+1))
     aristas=[]
@@ -15,7 +15,7 @@ def aristas_pancake(n):
         
     return aristas
 
-def aristas_star(n):
+def generadores_star(n):
     
     p1 = tuple(range(1, n+1))
     aristas = []
@@ -31,7 +31,7 @@ def aristas_star(n):
         
     return aristas
 
-def aristas_bubble(n):
+def generadores_bubble(n):
     
     p1 = tuple(range(1, n+1))
     aristas = []
@@ -47,7 +47,7 @@ def aristas_bubble(n):
         
     return aristas
 
-def aristas_trasposition(n):
+def generadores_transposition(n):
     
     p1 = tuple(range(1, n+1))
     aristas = []
@@ -64,13 +64,13 @@ def aristas_trasposition(n):
     
     return aristas
 
-def construir_mejorada_cayley(aristas):
+def construir_grafo_cayley(generadores):
     G = nx.Graph()# creamos el grafo vacio 
-    grado = len(aristas)
-    
-    letras = string.ascii_lowercase # genera una lista de letras minusculas
+    grado = len(generadores)
 
-    letras_generadores = {aristas[i]: letras[i] for i in range(grado)}
+    letras = string.ascii_lowercase + string.ascii_uppercase + string.digits # genera una lista de letras minusculas, mayusculas y digitos
+
+    letras_generadores = {generadores[i]: letras[i] for i in range(grado)}
 
     nodo_base = tuple(range(1, n+1)) #  nodo base es la permutacion identidad
     nodos = [nodo_base] #se crea una lista de nodos que inicia con el nodo base
@@ -81,9 +81,9 @@ def construir_mejorada_cayley(aristas):
         nodo_actual = nodos[i] #nodo actual es el nodo que se encuentre en el indice i
         i += 1 #incrementamos el indice para la siguiente iteracion
 
-        for arista in aristas: # recoremos los generadores de aristas
+        for generador in generadores: # recoremos los generadores de aristas
             nuevo_nodo = tuple(
-                nodo_actual[arista[j] - 1]
+                nodo_actual[generador[j] - 1]
                 for j in range(n)# creamos un nuevo nodo recoriendo el generador de arista 
             )
 
@@ -91,8 +91,8 @@ def construir_mejorada_cayley(aristas):
                 visitados.add(nuevo_nodo) # agregamos al conjunto de nodos visitados el nuevo nodo 
                 nodos.append(nuevo_nodo) # agregamos el nodo a la lista de nodos 
 
-            G.add_edge(nodo_actual, nuevo_nodo) # creamos las aristas
-            G.add_edge(nodo_actual, nuevo_nodo, label=letras_generadores[arista]) # agregamos la etiqueta a la arista
+
+            G.add_edge(nodo_actual, nuevo_nodo, label=letras_generadores[generador]) # agregamos la etiqueta a la arista
 
     return G
 
@@ -132,10 +132,13 @@ def dibujar_grafo(G):
 
 ###
 
-def bfs_etiquetado(G, nodo_inicio):
+def bfs_etiquetado(G, nodo_inicio, prioridad=None):
     G.nodes[nodo_inicio]["label"] = "$" # asignamos la etiqueta inicial al nodo de inicio
     cola = deque([nodo_inicio])# inicializamos la cola con el nodo de inicio
     visitados = {nodo_inicio} #se crea un conjunto de nodos visitados que inicia con el nodo de inicio
+
+    if prioridad is None:
+        prioridad = {}
 
     indice = 0
 
@@ -149,7 +152,7 @@ def bfs_etiquetado(G, nodo_inicio):
             vecinos.append((label, vecino)) # agregamos una tupla (etiqueta, vecino) a la lista de vecinos
 
         # ORDENAR
-        vecinos.sort(key=lambda x: x[0]) # ordenar los vecinos por la etiqueta de la arista
+        vecinos.sort(key=lambda x: (prioridad.get(x[0], 9999), x[0])) # ordenar los vecinos por la etiqueta de la arista
 
         #BFS en ese orden
         for label, vecino in vecinos: # recorremos los vecinos ordenados
@@ -193,12 +196,14 @@ def dibujar_grafo_bfs(G):
 
 
 n=4 # numero de elementos en la permutacion
-aristas = aristas_bubble(n) #invocamos la funcion aristas  para obtener las aristas posibles 
-G = construir_mejorada_cayley(aristas) # CREAMOS EL GRAFO DESEADO
-dibujar_grafo(G) # DIBUJAMOS EL GRAFO 
+generadores = generadores_transposition(n) #invocamos la funcion generadores  para obtener las aristas posibles
+G = construir_grafo_cayley(generadores) # CREAMOS EL GRAFO DESEADO
+dibujar_grafo(G) # DIBUJAMOS EL GRAFO
 
 nodo_inicio = (1,2,3,4)    # nodo de inicio para el BFS
 
-G = bfs_etiquetado(G, nodo_inicio) # REALIZAMOS EL BFS ETIQUETANDO LOS NODOS
+prioridad ={'b': 0, 'c':1}
+
+G = bfs_etiquetado(G, nodo_inicio, prioridad=prioridad) # REALIZAMOS EL BFS ETIQUETANDO LOS NODOS
 
 dibujar_grafo_bfs(G) # DIBUJAMOS EL GRAFO ETIQUETADO
