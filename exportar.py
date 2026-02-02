@@ -1,6 +1,6 @@
 import os
 import networkx as nx
-import ultimo  
+import cayley_graphs  
 
 
 def exportar_grafo_etiquetado(n, tipo, prioridad=None, outdir="gexf"):
@@ -8,25 +8,25 @@ def exportar_grafo_etiquetado(n, tipo, prioridad=None, outdir="gexf"):
         prioridad = {}
 
     
-    ultimo.n = n
+    cayley_graphs.n = n
 
     if tipo == "transposition":
-        generadores = ultimo.generadores_transposition(n)
+        generadores = cayley_graphs.generadores_transposition(n)
     elif tipo == "bubble":
-        generadores = ultimo.generadores_bubble(n)
+        generadores = cayley_graphs.generadores_bubble(n)
     elif tipo == "star":
-        generadores = ultimo.generadores_star(n)
+        generadores = cayley_graphs.generadores_star(n)
     elif tipo == "pancake":
-        generadores = ultimo.generadores_pancake(n)
+        generadores = cayley_graphs.generadores_pancake(n)
     else:
         raise ValueError("tipo inválido: transposition|bubble|star|pancake")
 
     # Construir grafo de Cayley
-    G = ultimo.construir_grafo_cayley(generadores)
+    G = cayley_graphs.construir_grafo_cayley(generadores)
 
     
     nodo_inicio = tuple(range(1, n + 1))
-    G = ultimo.bfs_etiquetado(G, nodo_inicio, prioridad=prioridad)
+    G = cayley_graphs.bfs_etiquetado(G, nodo_inicio, prioridad=prioridad)
 
     #Exportar el grafo 
     os.makedirs(outdir, exist_ok=True)
